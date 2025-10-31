@@ -1,14 +1,13 @@
 import multer from 'multer';
 import path from 'path';
+import config from '../config/env.js';
 
 // Configure multer storage
 const storage = multer.memoryStorage(); // Store in memory for processing
 
 // File filter
 const fileFilter = (req, file, cb) => {
-  // Default allowed types if env variable is not set
-  const allowedTypesString = process.env.ALLOWED_FILE_TYPES || 'image/jpeg,image/png,image/jpg,image/webp';
-  const allowedTypes = allowedTypesString.split(',');
+  const allowedTypes = config.ALLOWED_FILE_TYPES.split(',');
 
   if (!allowedTypes.includes(file.mimetype)) {
     const error = new Error('Invalid file type. Only JPEG, PNG, and WebP images are allowed.');
@@ -24,7 +23,7 @@ export const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: parseInt(process.env.MAX_FILE_SIZE) || 10485760 // 10MB default
+    fileSize: parseInt(config.MAX_FILE_SIZE)
   }
 });
 
