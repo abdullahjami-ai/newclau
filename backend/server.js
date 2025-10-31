@@ -8,10 +8,11 @@ import compressionRoutes from './src/routes/compression.js';
 import { errorHandler } from './src/middleware/errorHandler.js';
 import { rateLimiter } from './src/middleware/rateLimiter.js';
 
-dotenv.config();
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+// Load environment variables with explicit path
+dotenv.config({ path: join(__dirname, '.env') });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -48,7 +49,13 @@ app.use(errorHandler);
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📁 Environment: ${process.env.NODE_ENV}`);
+  console.log(`📁 Environment: ${process.env.NODE_ENV || 'development (default)'}`);
+  console.log(`📦 Max file size: ${process.env.MAX_FILE_SIZE || '10485760'} bytes`);
+
+  // Warn if .env file seems to not be loaded
+  if (!process.env.NODE_ENV) {
+    console.warn('⚠️  Warning: .env file may not be loaded. Using default values.');
+  }
 });
 
 export default app;

@@ -35,7 +35,23 @@ function App() {
       });
     } catch (err) {
       console.error('Compression error:', err);
-      setError(err.response?.data?.message || 'Failed to compress image. Please try again.');
+
+      // Handle blob error responses
+      if (err.response?.data instanceof Blob) {
+        const text = await err.response.data.text();
+        try {
+          const errorData = JSON.parse(text);
+          setError(errorData.message || 'Failed to compress image. Please try again.');
+        } catch {
+          setError('Failed to compress image. Please try again.');
+        }
+      } else {
+        setError(
+          err.response?.data?.message ||
+          err.message ||
+          'Failed to compress image. Please check your connection and try again.'
+        );
+      }
     } finally {
       setIsCompressing(false);
     }

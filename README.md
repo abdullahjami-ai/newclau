@@ -2,6 +2,12 @@
 
 A full-stack web application for compressing images with adjustable quality settings. Built with React, Express, and Sharp.
 
+## 📚 Documentation
+
+- **[README.md](README.md)** - You are here! Complete project overview
+- **[TESTING.md](TESTING.md)** - Troubleshooting guide and testing checklist
+- **[MVP-PLAN.md](MVP-PLAN.md)** - Development plan, fixes, and roadmap
+
 ## Features
 
 - **Drag & Drop Upload**: Easy file upload with visual feedback
