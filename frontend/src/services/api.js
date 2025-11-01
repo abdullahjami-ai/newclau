@@ -7,13 +7,16 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
  * @param {File} file - The image file to compress
  * @param {number} quality - Compression quality (1-100)
  * @param {string} format - Output format (optional)
+ * @param {boolean} lossless - Use lossless compression (optional)
  * @returns {Promise}
  */
-export const compressImage = async (file, quality, format = null) => {
+export const compressImage = async (file, quality, format = null, lossless = false) => {
   const formData = new FormData();
   formData.append('image', file);
   formData.append('quality', quality);
-  if (format) {
+  formData.append('lossless', lossless.toString());
+
+  if (format && format !== 'auto') {
     formData.append('format', format);
   }
 

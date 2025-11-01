@@ -13,11 +13,28 @@ const ImageComparison = ({ originalFile, compressedBlob, compressionStats }) => 
   const savedSize = originalSize - compressedSize;
   const savedPercentage = ((savedSize / originalSize) * 100).toFixed(1);
 
+  const mode = compressionStats?.mode || 'lossy';
+  const formatConverted = compressionStats?.formatConverted || false;
+
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold text-slate-800 mb-4">
-        Compression Results
-      </h3>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-slate-800">
+          Compression Results
+        </h3>
+        <div className="flex gap-2">
+          {mode === 'lossless' && (
+            <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
+              ✨ Lossless
+            </span>
+          )}
+          {formatConverted && (
+            <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded-full">
+              🔄 Converted
+            </span>
+          )}
+        </div>
+      </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 gap-4 mb-6">

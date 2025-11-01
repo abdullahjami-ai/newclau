@@ -5,9 +5,10 @@ import sharp from 'sharp';
  * @param {Buffer} imageBuffer - The image buffer
  * @param {number} quality - Quality percentage (1-100)
  * @param {string} format - Output format (jpeg, png, webp)
+ * @param {boolean} lossless - Use lossless compression
  * @returns {Promise<{buffer: Buffer, metadata: Object}>}
  */
-export const compressImage = async (imageBuffer, quality = 80, format = null) => {
+export const compressImage = async (imageBuffer, quality = 80, format = null, lossless = false) => {
   try {
     // Get original metadata
     const metadata = await sharp(imageBuffer).metadata();
@@ -17,30 +18,57 @@ export const compressImage = async (imageBuffer, quality = 80, format = null) =>
 
     let compressor = sharp(imageBuffer);
 
-    // Apply compression based on format
+    // Apply compression based on format and mode
     switch (outputFormat) {
       case 'jpeg':
       case 'jpg':
-        compressor = compressor.jpeg({
-          quality: parseInt(quality),
-          progressive: true,
-          mozjpeg: true // Use mozjpeg for better compression
-        });
+        if (lossless) {
+          // JPEG lossless mode - use highest quality with mozjpeg
+          compressor = compressor.jpeg({
+            quality: 100,
+            progressive: true,
+            mozjpeg: true,
+            chromaSubsampling: '4:4:4' // No chroma subsampling for better quality
+          });
+        } else {
+          compressor = compressor.jpeg({
+            quality: parseInt(quality),
+            progressive: true,
+            mozjpeg: true
+          });
+        }
         break;
 
       case 'png':
-        compressor = compressor.png({
-          quality: parseInt(quality),
-          compressionLevel: 9,
-          adaptiveFiltering: true
-        });
+        if (lossless) {
+          // PNG lossless mode - maximum compression without quality loss
+          compressor = compressor.png({
+            compressionLevel: 9,
+            adaptiveFiltering: true,
+            palette: false // Keep full color depth
+          });
+        } else {
+          compressor = compressor.png({
+            quality: parseInt(quality),
+            compressionLevel: 9,
+            adaptiveFiltering: true
+          });
+        }
         break;
 
       case 'webp':
-        compressor = compressor.webp({
-          quality: parseInt(quality),
-          effort: 6 // Higher effort = better compression
-        });
+        if (lossless) {
+          // WebP lossless mode
+          compressor = compressor.webp({
+            lossless: true,
+            effort: 6
+          });
+        } else {
+          compressor = compressor.webp({
+            quality: parseInt(quality),
+            effort: 6
+          });
+        }
         break;
 
       default:
@@ -68,7 +96,9 @@ export const compressImage = async (imageBuffer, quality = 80, format = null) =>
           format: newMetadata.format,
           size: compressedBuffer.length
         },
-        compressionRatio: ((1 - compressedBuffer.length / imageBuffer.length) * 100).toFixed(2)
+        compressionRatio: ((1 - compressedBuffer.length / imageBuffer.length) * 100).toFixed(2),
+        mode: lossless ? 'lossless' : 'lossy',
+        formatConverted: outputFormat !== metadata.format
       }
     };
   } catch (error) {

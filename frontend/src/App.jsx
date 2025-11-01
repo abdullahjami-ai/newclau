@@ -10,28 +10,40 @@ function App() {
   const [compressionStats, setCompressionStats] = useState(null);
   const [isCompressing, setIsCompressing] = useState(false);
   const [error, setError] = useState(null);
+  const [originalFormat, setOriginalFormat] = useState(null);
 
   const handleFileSelect = (file) => {
     setSelectedFile(file);
     setCompressedBlob(null);
     setCompressionStats(null);
     setError(null);
+
+    // Detect original format from file type
+    const format = file.type.split('/')[1];
+    setOriginalFormat(format);
   };
 
-  const handleCompress = async (quality) => {
+  const handleCompress = async (options) => {
     if (!selectedFile) return;
 
     setIsCompressing(true);
     setError(null);
 
     try {
-      const result = await compressImage(selectedFile, quality);
+      const result = await compressImage(
+        selectedFile,
+        options.quality,
+        options.format,
+        options.lossless
+      );
 
       setCompressedBlob(result.blob);
       setCompressionStats({
         originalSize: result.headers['x-original-size'],
         compressedSize: result.headers['x-compressed-size'],
-        compressionRatio: result.headers['x-compression-ratio']
+        compressionRatio: result.headers['x-compression-ratio'],
+        mode: result.headers['x-compression-mode'],
+        formatConverted: result.headers['x-format-converted'] === 'true'
       });
     } catch (err) {
       console.error('Compression error:', err);
@@ -136,6 +148,7 @@ function App() {
                 onCompress={handleCompress}
                 isCompressing={isCompressing}
                 fileName={selectedFile.name}
+                originalFormat={originalFormat}
               />
             )}
 
@@ -190,7 +203,8 @@ function App() {
 
         {/* Footer */}
         <footer className="mt-12 text-center text-sm text-slate-500">
-          <p>Built with React, Express, and Sharp • Phase 1 MVP</p>
+          <p>Built with React, Express, and Sharp • Phase 2 🚀</p>
+          <p className="text-xs mt-1">Features: Format Conversion • Lossless Compression • Quick Presets</p>
         </footer>
       </div>
     </div>

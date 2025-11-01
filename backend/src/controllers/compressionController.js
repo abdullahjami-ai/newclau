@@ -5,11 +5,14 @@ import { compressImage, getImageInfo } from '../utils/imageCompressor.js';
  */
 export const compressImageHandler = async (req, res, next) => {
   try {
-    const { quality = 80, format } = req.body;
+    const { quality = 80, format, lossless = 'false' } = req.body;
 
-    // Validate quality
+    // Parse lossless parameter (comes as string from FormData)
+    const isLossless = lossless === 'true' || lossless === true;
+
+    // Validate quality (only if not lossless)
     const qualityNum = parseInt(quality);
-    if (isNaN(qualityNum) || qualityNum < 1 || qualityNum > 100) {
+    if (!isLossless && (isNaN(qualityNum) || qualityNum < 1 || qualityNum > 100)) {
       return res.status(400).json({
         success: false,
         message: 'Quality must be between 1 and 100'
@@ -21,7 +24,7 @@ export const compressImageHandler = async (req, res, next) => {
     const originalName = req.file.originalname;
 
     // Compress the image
-    const result = await compressImage(imageBuffer, qualityNum, format);
+    const result = await compressImage(imageBuffer, qualityNum, format, isLossless);
 
     // Set response headers
     const extension = result.metadata.compressed.format;
@@ -32,7 +35,9 @@ export const compressImageHandler = async (req, res, next) => {
       'Content-Disposition': `attachment; filename="${filename}"`,
       'X-Original-Size': result.metadata.original.size,
       'X-Compressed-Size': result.metadata.compressed.size,
-      'X-Compression-Ratio': result.metadata.compressionRatio
+      'X-Compression-Ratio': result.metadata.compressionRatio,
+      'X-Compression-Mode': result.metadata.mode,
+      'X-Format-Converted': result.metadata.formatConverted
     });
 
     // Send the compressed image
