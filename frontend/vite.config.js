@@ -14,6 +14,11 @@ export default defineConfig({
   },
   preview: {
     host: '0.0.0.0',
-    port: process.env.PORT || 4173
+    port: process.env.PORT || 4173,
+    strictPort: true,
+    allowedHosts: [
+      'front-end-production-8703.up.railway.app',
+      '.railway.app' // Allow all Railway domains
+    ]
   }
 });
