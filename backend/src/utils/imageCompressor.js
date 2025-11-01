@@ -16,6 +16,13 @@ export const compressImage = async (imageBuffer, quality = 80, format = null, lo
     // Determine output format
     const outputFormat = format || metadata.format;
 
+    // Debug logging
+    console.log('📸 Image Compressor:');
+    console.log('  Original format:', metadata.format);
+    console.log('  Requested format:', format);
+    console.log('  Output format:', outputFormat);
+    console.log('  Lossless:', lossless);
+
     let compressor = sharp(imageBuffer);
 
     // Apply compression based on format and mode
@@ -80,6 +87,12 @@ export const compressImage = async (imageBuffer, quality = 80, format = null, lo
 
     // Get new metadata
     const newMetadata = await sharp(compressedBuffer).metadata();
+
+    // Debug logging
+    console.log('✅ Compression complete:');
+    console.log('  Input format:', metadata.format);
+    console.log('  Output format:', newMetadata.format);
+    console.log('  Format converted:', outputFormat !== metadata.format);
 
     return {
       buffer: compressedBuffer,

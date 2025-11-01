@@ -7,6 +7,12 @@ export const compressImageHandler = async (req, res, next) => {
   try {
     const { quality = 80, format, lossless = 'false' } = req.body;
 
+    // Debug logging
+    console.log('🔍 Compression Request:');
+    console.log('  Quality:', quality);
+    console.log('  Format:', format);
+    console.log('  Lossless:', lossless);
+
     // Parse lossless parameter (comes as string from FormData)
     const isLossless = lossless === 'true' || lossless === true;
 

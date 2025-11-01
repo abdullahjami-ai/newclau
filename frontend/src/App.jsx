@@ -72,10 +72,20 @@ function App() {
   const handleDownload = () => {
     if (!compressedBlob) return;
 
+    // Determine the correct file extension from the blob type
+    const blobType = compressedBlob.type; // e.g., "image/webp"
+    const extension = blobType.split('/')[1]; // e.g., "webp"
+
+    // Get original filename without extension
+    const originalName = selectedFile.name.split('.')[0];
+
+    // Create new filename with correct extension
+    const filename = `compressed_${originalName}.${extension}`;
+
     const url = URL.createObjectURL(compressedBlob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `compressed_${selectedFile.name}`;
+    link.download = filename;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
