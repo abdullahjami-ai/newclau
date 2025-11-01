@@ -9,6 +9,9 @@ import config, { debugEnv } from './src/config/env.js';
 const app = express();
 const PORT = config.PORT;
 
+// Trust proxy - Required for Railway deployment
+app.set('trust proxy', true);
+
 // Security middleware
 app.use(helmet());
 app.use(cors({
