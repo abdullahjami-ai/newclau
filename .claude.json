@@ -1,0 +1,287 @@
+{
+  "version": "2.0.0",
+  "architecture": "CODE-FIRST",
+  "project": {
+    "name": "Image Compressor Tool Suite",
+    "type": "full-stack-web-app",
+    "description": "Image processing and manipulation web application with CODE-FIRST architecture"
+  },
+  "approach": {
+    "paradigm": "CODE-FIRST",
+    "principle": "AI writes code, code calls tools, tools process data",
+    "token_efficiency": "99.5% reduction (151,800 → 710 tokens per task)",
+    "based_on": "https://www.anthropic.com/code-execution-mcp"
+  },
+  "components": {
+    "task_classifier": {
+      "type": "routing_logic",
+      "description": "Simple classification: DIRECT_CODE vs RESEARCH_ONLY",
+      "implementation": "Direct AI analysis, no separate agent",
+      "token_cost": "~50 tokens per classification"
+    },
+    "mcp_filesystem": {
+      "type": "tool_discovery",
+      "description": "MCP tools as TypeScript APIs, discovered progressively",
+      "location": ".mcp-servers/",
+      "servers": ["context7", "socket", "playwright"],
+      "discovery_method": "filesystem_exploration",
+      "token_savings": "98.7% (150K → 2K tokens)"
+    },
+    "execution_sandbox": {
+      "type": "code_execution",
+      "description": "Secure environment for code execution with resource limits",
+      "features": [
+        "Isolated execution",
+        "Path restrictions",
+        "Resource limits",
+        "Data processing without context flow"
+      ],
+      "privacy": "Sensitive data stays in sandbox"
+    },
+    "skills_library": {
+      "type": "reusable_patterns",
+      "description": "Saved code implementations that compound over time",
+      "location": ".skills/",
+      "available": ["security-audit", "run-tests"],
+      "performance": "10-20x faster on reuse",
+      "token_savings": "95% on subsequent runs"
+    }
+  },
+  "workflow": {
+    "description": "Single unified workflow for all tasks",
+    "steps": [
+      {
+        "step": 1,
+        "action": "classify_task",
+        "description": "AI determines: DIRECT_CODE or RESEARCH_ONLY",
+        "tokens": "~50"
+      },
+      {
+        "step": 2,
+        "action": "explore_tools",
+        "description": "Discover needed MCP tools via filesystem",
+        "tokens": "~100-500",
+        "method": "progressive_discovery"
+      },
+      {
+        "step": 3,
+        "action": "write_code",
+        "description": "AI writes TypeScript code that calls MCP tools",
+        "tokens": "~150-300",
+        "output": "Executable code in sandbox"
+      },
+      {
+        "step": 4,
+        "action": "execute_sandbox",
+        "description": "Code runs in isolated environment",
+        "tokens": "0 (execution happens in sandbox)",
+        "data_processing": "All intermediate results stay in sandbox"
+      },
+      {
+        "step": 5,
+        "action": "return_summary",
+        "description": "Only final summary flows back to AI context",
+        "tokens": "~50-100",
+        "privacy": "Sensitive data stays in sandbox"
+      }
+    ],
+    "total_tokens": "~350-950 per task (vs 151,800 traditional)"
+  },
+  "mcp_integration": {
+    "available_servers": {
+      "context7": {
+        "purpose": "Real-time documentation and code examples",
+        "provider": "Upstash",
+        "cost": "FREE",
+        "installation": "npx @upstash/context7-mcp",
+        "api_location": ".mcp-servers/context7/",
+        "tools": ["searchDocs", "getExample"],
+        "use_cases": [
+          "Implementing features with specific libraries",
+          "Getting current API documentation",
+          "Finding official code examples",
+          "Avoiding deprecated patterns"
+        ]
+      },
+      "socket": {
+        "purpose": "Dependency security analysis",
+        "provider": "Socket Security",
+        "cost": "FREE (hosted service)",
+        "service_url": "https://mcp.socket.dev/",
+        "api_location": ".mcp-servers/socket/",
+        "tools": ["scanDependencies", "checkPackage"],
+        "use_cases": [
+          "Scanning npm packages for vulnerabilities",
+          "Checking dependency security",
+          "Evaluating new dependencies",
+          "Supply chain security",
+          "Security audits"
+        ]
+      },
+      "playwright": {
+        "purpose": "Browser automation and UI testing",
+        "provider": "Microsoft",
+        "cost": "FREE",
+        "installation": "npx @playwright/mcp@latest",
+        "api_location": ".mcp-servers/playwright/",
+        "tools": ["navigateTo", "click", "fill", "screenshot"],
+        "use_cases": [
+          "Testing UI flows",
+          "Generating automated tests",
+          "Finding UI bugs",
+          "Validating responsive design",
+          "Cross-browser testing"
+        ]
+      }
+    },
+    "discovery_approach": {
+      "method": "progressive_filesystem_exploration",
+      "description": "AI explores .mcp-servers/ directory to discover tools as needed",
+      "benefits": [
+        "98.7% token savings (150K → 2K tokens)",
+        "Load only what's needed",
+        "Scales to 1000+ tools without overhead"
+      ],
+      "example": [
+        "1. AI explores: fs.readdir('.mcp-servers/') → ['context7', 'socket', 'playwright']",
+        "2. AI reads only needed tool: fs.readFile('.mcp-servers/socket/scanDependencies.ts')",
+        "3. AI writes code that imports and calls tool",
+        "4. Code executes in sandbox"
+      ]
+    },
+    "integration_guidelines": [
+      "Load tools on-demand via filesystem exploration",
+      "Process MCP data in sandbox (not through AI context)",
+      "Cache MCP results in code when appropriate",
+      "Return only summaries to AI context"
+    ]
+  },
+  "skills": {
+    "concept": "Reusable code patterns saved for instant execution",
+    "location": ".skills/",
+    "available": {
+      "security_audit": {
+        "file": ".skills/security-audit/audit.ts",
+        "purpose": "Comprehensive security audit with Socket MCP, npm audit, secret detection",
+        "token_efficiency": "First: ~250 tokens, Subsequent: ~70 tokens (72% faster)",
+        "when_to_use": ["Before deployments", "After adding dependencies", "Weekly security checks"]
+      },
+      "run_tests": {
+        "file": ".skills/run-tests/test.ts",
+        "purpose": "Execute Jest/Vitest test suite with coverage",
+        "token_efficiency": "First: ~200 tokens, Subsequent: ~70 tokens (65% faster)",
+        "when_to_use": ["Before commits", "After bug fixes", "During CI/CD"]
+      }
+    },
+    "creation": {
+      "automatic": "AI can save successful code as skills for future reuse",
+      "manual": "Create .skills/<name>/SKILL.md and implementation file",
+      "evolution": "Skills improve over time with refinements"
+    },
+    "benefits": [
+      "10-20x faster execution on reuse",
+      "95% token reduction on subsequent runs",
+      "Knowledge compounds over time",
+      "Type-safe TypeScript implementations"
+    ]
+  },
+  "rules": {
+    "code_first_principles": [
+      "AI writes code directly (no code-generator agent)",
+      "Code executes in sandbox (not through AI context)",
+      "Tools loaded progressively (not all upfront)",
+      "Data processed in sandbox (only summaries to AI)",
+      "Skills reused when applicable (10-20x faster)"
+    ],
+    "task_classification": [
+      "DIRECT_CODE: AI writes executable code for implementation tasks",
+      "RESEARCH_ONLY: AI explores codebase for understanding (no code execution)"
+    ],
+    "token_efficiency": [
+      "Discover tools progressively via filesystem",
+      "Process large datasets in sandbox",
+      "Return summaries only (not raw data)",
+      "Reuse skills when applicable",
+      "Cache MCP results in code"
+    ],
+    "code_quality": [
+      "Follow DRY principles",
+      "Use meaningful names",
+      "Add appropriate error handling",
+      "Write testable code",
+      "Type-safe TypeScript preferred"
+    ],
+    "security": [
+      "Validate all inputs",
+      "No hardcoded secrets",
+      "Sanitize error messages",
+      "Follow OWASP top 10",
+      "Use Socket MCP for dependency scanning"
+    ],
+    "privacy": [
+      "Process PII in sandbox only",
+      "Don't flow sensitive data through AI context",
+      "Tokenize identifiers when needed",
+      "Return anonymized summaries"
+    ]
+  },
+  "project_specific": {
+    "tech_stack": {
+      "backend": {
+        "runtime": "Node.js",
+        "framework": "Express",
+        "image_processing": "Sharp",
+        "upload_handling": "Multer"
+      },
+      "frontend": {
+        "framework": "React 18",
+        "build_tool": "Vite",
+        "styling": "Tailwind CSS",
+        "http_client": "Axios"
+      }
+    },
+    "conventions": {
+      "code_style": "ES6+",
+      "naming": {
+        "functions": "camelCase",
+        "components": "PascalCase",
+        "constants": "UPPER_SNAKE_CASE"
+      },
+      "async": "async/await preferred",
+      "error_handling": "try-catch blocks",
+      "imports": "named imports preferred"
+    },
+    "file_limits": {
+      "max_upload_size": "10MB",
+      "allowed_types": ["image/jpeg", "image/png", "image/webp"]
+    },
+    "api_patterns": {
+      "base_path": "/api",
+      "response_format": "{success, data/error}",
+      "file_upload": "multipart/form-data"
+    }
+  },
+  "metrics": {
+    "token_efficiency": {
+      "traditional_approach": "151,800 tokens per task",
+      "code_first_approach": "710 tokens per task",
+      "savings": "99.5%"
+    },
+    "tool_discovery": {
+      "traditional_load_all": "150,000 tokens",
+      "progressive_discovery": "2,000 tokens",
+      "savings": "98.7%"
+    },
+    "skill_reuse": {
+      "first_run": "200-250 tokens",
+      "subsequent_runs": "70 tokens",
+      "savings": "65-72%"
+    }
+  },
+  "migration": {
+    "from": "18-agent architecture",
+    "to": "CODE-FIRST with 4 components",
+    "date": "2025-11-05",
+    "archived_agents": ".claude/archive/"
+  }
+}

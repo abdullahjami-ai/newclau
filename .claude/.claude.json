@@ -1,0 +1,404 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "name": "Image Compressor Tool Suite",
+    "type": "full-stack-web-app",
+    "description": "Image processing and manipulation web application"
+  },
+  "agents": {
+    "agent-orchestrator": {
+      "priority": 0,
+      "role": "Task Coordinator",
+      "usage": "automatic",
+      "description": "Intelligently analyzes tasks, assigns them to appropriate agents, and coordinates workflows",
+      "dependencies": [],
+      "triggers": [
+        "all_user_requests",
+        "complex_tasks",
+        "multi_agent_workflows"
+      ]
+    },
+    "content-engineer": {
+      "priority": 1,
+      "role": "Context Provider",
+      "usage": "proactive",
+      "description": "Provides context and optimized prompts for other agents",
+      "dependencies": [],
+      "triggers": [
+        "before_code_generation",
+        "before_code_review",
+        "before_refactoring",
+        "before_bug_hunt"
+      ]
+    },
+    "code-generator": {
+      "priority": 2,
+      "role": "Code Creator",
+      "usage": "proactive",
+      "description": "Generates new code, implements features, creates boilerplate",
+      "dependencies": ["content-engineer"],
+      "triggers": [
+        "new_feature_request",
+        "scaffolding_needed",
+        "boilerplate_creation"
+      ]
+    },
+    "code-reviewer": {
+      "priority": 1,
+      "role": "Quality Assurance",
+      "usage": "required_before_commit",
+      "description": "Reviews code for quality, security, and best practices",
+      "dependencies": ["content-engineer"],
+      "triggers": [
+        "before_major_commit",
+        "pull_request",
+        "code_changes_complete"
+      ]
+    },
+    "refactoring-agent": {
+      "priority": 2,
+      "role": "Code Optimizer",
+      "usage": "on_demand",
+      "description": "Improves code structure, reduces technical debt, modernizes code",
+      "dependencies": ["content-engineer", "code-reviewer"],
+      "triggers": [
+        "code_smell_detected",
+        "performance_issues",
+        "legacy_code_modernization"
+      ]
+    },
+    "bug-hunter": {
+      "priority": 1,
+      "role": "Debugger",
+      "usage": "proactive",
+      "description": "Finds bugs, analyzes errors, identifies issues",
+      "dependencies": ["content-engineer"],
+      "triggers": [
+        "test_failure",
+        "error_reported",
+        "unexpected_behavior",
+        "production_issue"
+      ]
+    },
+    "mcp-coordinator": {
+      "priority": 1,
+      "role": "MCP Integration Specialist",
+      "usage": "proactive",
+      "description": "Leverages MCP servers (Context7, Playwright, Socket) for documentation, testing, and security",
+      "dependencies": [],
+      "triggers": [
+        "need_documentation",
+        "ui_testing_required",
+        "security_scan_needed",
+        "library_implementation",
+        "dependency_check"
+      ]
+    }
+  },
+  "workflows": {
+    "new_feature": {
+      "steps": [
+        {
+          "agent": "content-engineer",
+          "action": "gather_context",
+          "description": "Analyze requirements and provide context"
+        },
+        {
+          "agent": "code-generator",
+          "action": "implement_feature",
+          "description": "Generate feature code"
+        },
+        {
+          "agent": "code-reviewer",
+          "action": "review_changes",
+          "description": "Review generated code"
+        },
+        {
+          "agent": "bug-hunter",
+          "action": "test_feature",
+          "description": "Verify no bugs introduced"
+        }
+      ]
+    },
+    "bug_fix": {
+      "steps": [
+        {
+          "agent": "bug-hunter",
+          "action": "identify_root_cause",
+          "description": "Find and analyze the bug"
+        },
+        {
+          "agent": "content-engineer",
+          "action": "gather_context",
+          "description": "Provide context for fix"
+        },
+        {
+          "agent": "code-generator",
+          "action": "implement_fix",
+          "description": "Generate bug fix"
+        },
+        {
+          "agent": "code-reviewer",
+          "action": "review_fix",
+          "description": "Ensure fix is correct and safe"
+        }
+      ]
+    },
+    "refactoring": {
+      "steps": [
+        {
+          "agent": "content-engineer",
+          "action": "analyze_codebase",
+          "description": "Understand current state"
+        },
+        {
+          "agent": "refactoring-agent",
+          "action": "improve_code",
+          "description": "Apply refactoring patterns"
+        },
+        {
+          "agent": "bug-hunter",
+          "action": "verify_no_regression",
+          "description": "Ensure functionality preserved"
+        },
+        {
+          "agent": "code-reviewer",
+          "action": "review_refactoring",
+          "description": "Verify improvements"
+        }
+      ]
+    },
+    "code_review": {
+      "steps": [
+        {
+          "agent": "content-engineer",
+          "action": "gather_change_context",
+          "description": "Understand what changed and why"
+        },
+        {
+          "agent": "code-reviewer",
+          "action": "comprehensive_review",
+          "description": "Review quality, security, performance"
+        },
+        {
+          "agent": "bug-hunter",
+          "action": "scan_for_issues",
+          "description": "Look for potential bugs"
+        }
+      ]
+    },
+    "ui_testing": {
+      "steps": [
+        {
+          "agent": "mcp-coordinator",
+          "action": "playwright_test",
+          "description": "Use Playwright MCP to test UI flows"
+        },
+        {
+          "agent": "bug-hunter",
+          "action": "analyze_results",
+          "description": "Analyze test results and identify issues"
+        },
+        {
+          "agent": "code-generator",
+          "action": "fix_issues",
+          "description": "Fix any identified issues"
+        },
+        {
+          "agent": "mcp-coordinator",
+          "action": "retest",
+          "description": "Verify fixes with Playwright"
+        }
+      ]
+    },
+    "security_audit": {
+      "steps": [
+        {
+          "agent": "mcp-coordinator",
+          "action": "socket_scan",
+          "description": "Use Socket MCP to scan dependencies"
+        },
+        {
+          "agent": "code-reviewer",
+          "action": "review_vulnerabilities",
+          "description": "Review security findings"
+        },
+        {
+          "agent": "code-generator",
+          "action": "update_dependencies",
+          "description": "Update vulnerable dependencies"
+        },
+        {
+          "agent": "mcp-coordinator",
+          "action": "rescan",
+          "description": "Verify security improvements"
+        }
+      ]
+    },
+    "feature_with_docs": {
+      "steps": [
+        {
+          "agent": "mcp-coordinator",
+          "action": "context7_fetch",
+          "description": "Fetch library documentation via Context7"
+        },
+        {
+          "agent": "content-engineer",
+          "action": "build_context",
+          "description": "Build implementation context"
+        },
+        {
+          "agent": "code-generator",
+          "action": "implement",
+          "description": "Implement using documented patterns"
+        },
+        {
+          "agent": "mcp-coordinator",
+          "action": "playwright_test",
+          "description": "Test implementation"
+        },
+        {
+          "agent": "code-reviewer",
+          "action": "review",
+          "description": "Review code quality"
+        }
+      ]
+    }
+  },
+  "orchestration": {
+    "entry_point": "agent-orchestrator",
+    "description": "All complex user requests should be processed through agent-orchestrator first",
+    "coordination_rules": [
+      "Orchestrator analyzes request and determines task type",
+      "Orchestrator selects appropriate workflow or custom agent sequence",
+      "Orchestrator ensures dependencies are respected",
+      "Orchestrator monitors progress and reports completion"
+    ],
+    "workflow_management": {
+      "new_feature": "orchestrator → content-engineer → code-generator → code-reviewer → bug-hunter",
+      "bug_fix": "orchestrator → bug-hunter → content-engineer → code-generator → code-reviewer",
+      "refactoring": "orchestrator → content-engineer → refactoring-agent → bug-hunter → code-reviewer",
+      "code_review": "orchestrator → content-engineer → code-reviewer → bug-hunter",
+      "research": "orchestrator → content-engineer"
+    }
+  },
+  "rules": {
+    "orchestration": [
+      "agent-orchestrator is the primary entry point for all requests",
+      "orchestrator must analyze task before assigning agents",
+      "orchestrator ensures all required agents are invoked",
+      "orchestrator provides final completion report"
+    ],
+    "before_commit": [
+      "code-reviewer must approve major changes",
+      "bug-hunter must verify no test failures",
+      "content-engineer should document changes"
+    ],
+    "code_quality": [
+      "Follow DRY principles",
+      "Use meaningful names",
+      "Add appropriate error handling",
+      "Write testable code"
+    ],
+    "security": [
+      "Validate all inputs",
+      "No hardcoded secrets",
+      "Sanitize error messages",
+      "Follow OWASP top 10"
+    ],
+    "mcp_usage": [
+      "Use Context7 for library documentation and current best practices",
+      "Use Playwright for UI testing and browser automation",
+      "Use Socket for dependency security scanning",
+      "MCP Coordinator should be invoked for documentation/testing/security needs",
+      "Prefer MCP-provided information over potentially outdated knowledge",
+      "Always verify MCP server availability with /mcp before use"
+    ]
+  },
+  "mcp_integration": {
+    "available_servers": {
+      "context7": {
+        "purpose": "Real-time documentation and code examples",
+        "use_cases": [
+          "Implementing features with specific libraries",
+          "Getting current API documentation",
+          "Finding official code examples",
+          "Avoiding deprecated patterns"
+        ],
+        "invocation": "Use context7 to [specific documentation need]"
+      },
+      "playwright": {
+        "purpose": "Browser automation and UI testing",
+        "use_cases": [
+          "Testing UI flows",
+          "Generating automated tests",
+          "Finding UI bugs",
+          "Validating responsive design",
+          "Cross-browser testing"
+        ],
+        "invocation": "Use playwright to test [specific UI flow]"
+      },
+      "socket": {
+        "purpose": "Dependency security analysis",
+        "use_cases": [
+          "Scanning npm packages for vulnerabilities",
+          "Checking dependency security",
+          "Evaluating new dependencies",
+          "Supply chain security",
+          "Security audits"
+        ],
+        "invocation": "Use socket to scan [package or dependencies]"
+      }
+    },
+    "integration_guidelines": [
+      "MCP Coordinator manages all MCP interactions",
+      "Context7 should be used before implementing unfamiliar libraries",
+      "Playwright required for UI feature testing",
+      "Socket scan required before adding new dependencies",
+      "Document all MCP usage in commit messages",
+      "Cache MCP results when appropriate to reduce calls"
+    ],
+    "workflow_integration": {
+      "new_feature": "Include Context7 for docs + Playwright for testing",
+      "ui_changes": "Always test with Playwright",
+      "dependency_updates": "Always scan with Socket first",
+      "security_review": "Use Socket for comprehensive audit"
+    }
+  },
+  "project_specific": {
+    "tech_stack": {
+      "backend": {
+        "runtime": "Node.js",
+        "framework": "Express",
+        "image_processing": "Sharp",
+        "upload_handling": "Multer"
+      },
+      "frontend": {
+        "framework": "React 18",
+        "build_tool": "Vite",
+        "styling": "Tailwind CSS",
+        "http_client": "Axios"
+      }
+    },
+    "conventions": {
+      "code_style": "ES6+",
+      "naming": {
+        "functions": "camelCase",
+        "components": "PascalCase",
+        "constants": "UPPER_SNAKE_CASE"
+      },
+      "async": "async/await preferred",
+      "error_handling": "try-catch blocks",
+      "imports": "named imports preferred"
+    },
+    "file_limits": {
+      "max_upload_size": "10MB",
+      "allowed_types": ["image/jpeg", "image/png", "image/webp"]
+    },
+    "api_patterns": {
+      "base_path": "/api",
+      "response_format": "{success, data/error}",
+      "file_upload": "multipart/form-data"
+    }
+  }
+}

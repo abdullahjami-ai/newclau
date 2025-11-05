@@ -1,0 +1,14 @@
+{
+  "name": "image-compressor",
+  "version": "1.0.0",
+  "description": "Full-stack image compression web application",
+  "scripts": {
+    "start": "./start.sh",
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm run dev",
+    "install-all": "cd backend && npm install && cd ../frontend && npm install"
+  },
+  "keywords": ["image", "compression", "web-app"],
+  "author": "",
+  "license": "MIT"
+}
