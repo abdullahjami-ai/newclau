@@ -1,0 +1,49 @@
+{
+  "mcpServers": {
+    "context7": {
+      "name": "Context7",
+      "description": "Up-to-date documentation and code examples",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "provider": "Upstash",
+      "cost": "FREE",
+      "tools": [
+        "search_docs",
+        "get_example"
+      ]
+    },
+    "socket": {
+      "name": "Socket Security",
+      "description": "Dependency security analysis and vulnerability scanning",
+      "command": "npx",
+      "args": ["-y", "@socketsecurity/mcp@latest"],
+      "provider": "Socket.dev",
+      "cost": "FREE",
+      "hosted_service": "https://mcp.socket.dev/",
+      "tools": [
+        "depscore",
+        "check_package"
+      ]
+    },
+    "playwright": {
+      "name": "Playwright Browser Automation",
+      "description": "Browser automation and UI testing",
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"],
+      "provider": "Microsoft",
+      "cost": "FREE",
+      "tools": [
+        "playwright_navigate",
+        "playwright_click",
+        "playwright_fill",
+        "playwright_screenshot"
+      ]
+    }
+  },
+  "settings": {
+    "progressive_discovery": true,
+    "cache_tools": true,
+    "timeout": 30000,
+    "max_retries": 3
+  }
+}
